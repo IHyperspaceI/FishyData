@@ -34,7 +34,7 @@ def write_to_csv(list):
         writer.writeheader()
         writer.writerows(test_fish)
 
-for i in range(20):
+for i in range(200):
     fish = generate_random_fish()
     test_fish.append(fish)
 

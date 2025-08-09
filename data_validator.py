@@ -1,29 +1,29 @@
 import csv
 
-csv_header = ["Timestamp", "Tank Lot", "Processing Start", "Quality", "Core Temperature (°F)", "Comments"]
+csv_header = ["Timestamp", "Tank Lot", "Processing Start", "Quality", "Core Temperature (°F)", "Comments", "Weight (lbs)"]
 fish_dict = []
 
-def fix_comments(old_comment):
-    position = old_comment.split(",")[0]
+def parse_comments(old_comment):
+    position = old_comment.split(",")[0].lower()
     weight = old_comment.split(",")[1]
 
     if len(position) > 3:
         new_pos = ""
         print("Old: " + position)
-        if "mid" in position or "Mid" in position:
+        if "mid" in position:
             new_pos += "M"
-        if "top" in position or "Top" in position:
+        if "top" in position:
             new_pos += "T"
-        if "bottom" in position or "Bottom" in position:
+        if "bottom" in position:
             new_pos += "B"
-        if "left" in position or "Left" in position:
+        if "left" in position:
             new_pos += "L"
-        if "right" in position or "Right" in position:
+        if "right" in position:
             new_pos += "R"
 
         position = new_pos
             
-    return position + ", " + weight
+    return position.upper(), weight
 
 
 def fix_data(reader):
@@ -34,9 +34,9 @@ def fix_data(reader):
         processing_start = x["Processing Start"]
         quality = x["Quality"]
         core_temp = x["Core Temperature (°F)"]
-        comment = fix_comments(x["Comments"])
+        comment, weight = parse_comments(x["Comments"])
 
-        fish_dict.append({csv_header[0]:timestamp, csv_header[1]:tank_lot, csv_header[2]:processing_start, csv_header[3]:quality, csv_header[4]:core_temp, csv_header[5]:comment, })
+        fish_dict.append({csv_header[0]:timestamp, csv_header[1]:tank_lot, csv_header[2]:processing_start, csv_header[3]:quality, csv_header[4]:core_temp, csv_header[5]:comment, csv_header[6]:weight})
 
 
 def write_to_csv(list, filename):
